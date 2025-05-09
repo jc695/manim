@@ -4,7 +4,8 @@
 DOCKER = docker run --rm -it -v $(shell pwd):/manim manimcommunity/manim manim
 FILE ?= two_sum_visual.py
 SCENE ?= TwoSumScene
-OUTPUT_DIR = media
+MEDIA_DIR = media
+OUTPUT_DIR = output
 
 # Default target
 .PHONY: all
@@ -34,6 +35,7 @@ preview:
 .PHONY: clean
 clean:
 	rm -rf $(OUTPUT_DIR)
+	rm -rf $(MEDIA_DIR)
 
 # Convert MP4 to WebM
 .PHONY: convert
