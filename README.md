@@ -6,6 +6,11 @@ Manim code → Docker container → MP4/WebM video 🎞️
 
 ---
 
+## 🌟 Video Example
+![Transformers Scene](transformers.gif)
+
+---
+
 ## 📦 Prerequisites
 
 - [Docker](https://www.docker.com/)
