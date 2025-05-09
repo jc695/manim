@@ -61,7 +61,14 @@ make clean
 
 Use this to compress or convert output videos:
 ```bash
-make convert INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/output.webm
+make mp4 INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/output.webm
+```
+
+## 🔄 Convert MP4 to gif
+
+Use this to compress or convert output videos:
+```bash
+make gif INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/output.webm
 ```
 
 ---
