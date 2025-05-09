@@ -1,7 +1,7 @@
 # manim project specific files
 media/*
 !media/.gitkeep
-output/*
+output/
 !output/.gitkeep
 
 # Byte-compiled / optimized / DLL files
