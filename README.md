@@ -68,7 +68,7 @@ make mp4 INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/
 
 Use this to compress or convert output videos:
 ```bash
-make gif INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/output.webm
+make gif INPUT=media/your_scene/videos/input.mp4 OUTPUT=media/your_scene/videos/output.gif
 ```
 
 ---
