@@ -1,4 +1,4 @@
-# Makefile for rendering Manim animations using Docker and converting MP4 to WebM
+# Makefile for rendering Manim animations using Docker and converting MP4 to WebM or GIF
 
 # Default variables (can be overridden from command line)
 DOCKER = docker run --rm -it -v $(shell pwd):/manim manimcommunity/manim manim
@@ -38,14 +38,30 @@ clean:
 	rm -rf $(MEDIA_DIR)
 
 # Convert MP4 to WebM
-.PHONY: convert
-convert:
+.PHONY: webm
+webm:
 	@if [ -z "$(INPUT)" ] || [ -z "$(OUTPUT)" ]; then \
 		echo "Error: Both INPUT and OUTPUT are required."; \
-		echo "Example: make convert INPUT=media/two_sum/videos/input.mp4 OUTPUT=media/two_sum/videos/output.webm"; \
+		echo "Example: make webm INPUT=media/video.mp4 OUTPUT=media/video.webm"; \
 		exit 1; \
 	fi
-	@docker run --rm -v $(shell pwd):/data jrottenberg/ffmpeg -i "/data/$$(echo '$(INPUT)' | sed 's|^/||')" -c:v libvpx-vp9 -c:a libvorbis -y "/data/$$(echo '$(OUTPUT)' | sed 's|^/||')"
+	@docker run --rm -v $(shell pwd):/data jrottenberg/ffmpeg \
+		-i "/data/$$(echo '$(INPUT)' | sed 's|^/||')" \
+		-c:v libvpx-vp9 -c:a libvorbis -y \
+		"/data/$$(echo '$(OUTPUT)' | sed 's|^/||')"
+
+# Convert MP4 to GIF
+.PHONY: gif
+gif:
+	@if [ -z "$(INPUT)" ] || [ -z "$(OUTPUT)" ]; then \
+		echo "Error: Both INPUT and OUTPUT are required."; \
+		echo "Example: make gif INPUT=media/video.mp4 OUTPUT=media/video.gif"; \
+		exit 1; \
+	fi
+	@docker run --rm -v $(shell pwd):/data jrottenberg/ffmpeg \
+		-i "/data/$$(echo '$(INPUT)' | sed 's|^/||')" \
+		-vf "fps=10,scale=480:-1:flags=lanczos" -y \
+		"/data/$$(echo '$(OUTPUT)' | sed 's|^/||')"
 
 # Help message
 .PHONY: help
@@ -57,12 +73,13 @@ help:
 	@echo "  high     - Render in high quality (1080p, 60fps) [default]"
 	@echo "  preview  - Preview animation without saving (low quality)"
 	@echo "  clean    - Remove generated media files"
-	@echo "  convert  - Convert MP4 to WebM (requires INPUT and OUTPUT)"
+	@echo "  webm     - Convert MP4 to WebM (requires INPUT and OUTPUT)"
+	@echo "  gif      - Convert MP4 to GIF (requires INPUT and OUTPUT)"
 	@echo "Options for render targets:"
 	@echo "  FILE=<file> SCENE=<scene>"
-	@echo "Options for convert target:"
-	@echo "  INPUT=<input.mp4> OUTPUT=<output.webm> (relative to current directory)"
+	@echo "Options for convert targets:"
+	@echo "  INPUT=<input.mp4> OUTPUT=<output.webm|.gif> (relative to current directory)"
 	@echo "Examples:"
-	@echo "  make preview FILE=consistent_hashing_visual.py SCENE=ConsistentHashingScene"
-	@echo "  make convert INPUT=media/two_sum/videos/input.mp4 OUTPUT=media/two_sum/videos/output.webm"
-	@echo "  make convert INPUT=/media/two_sum/videos/input.mp4 OUTPUT=/media/two_sum/videos/output.webm (leading / is ignored)"
+	@echo "  make preview FILE=hashing.py SCENE=HashScene"
+	@echo "  make webm INPUT=media/video.mp4 OUTPUT=media/video.webm"
+	@echo "  make gif INPUT=media/video.mp4 OUTPUT=media/video.gif"
