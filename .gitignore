@@ -1,3 +1,7 @@
+# manim project specific files
+media/*
+!media/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
